@@ -110,7 +110,7 @@ Kita bisa mendeklarasikan namespace pada file `Monster.java` seperti berikut:
 package entity.monster;
 ```
 
-Public class pada file tersebut akan memili "fully qualified name" berupa `entity.monster.Monster`, dan bisa kita import dengan 
+Public class pada file tersebut akan memili "fully qualified name" berupa `entity.monster.Monster`, dan bisa kita import dengan:
 ```
 import entity.monster.Monster
 ```
@@ -193,6 +193,7 @@ tp4/
 
 ---
 **Perlu diingat: layaknya nama file dan nama public class, struktur dari directory, harus sama dengan deklarasi package-nya.**
+
 Contoh:
 ```
 entity/monster/Monster.java
