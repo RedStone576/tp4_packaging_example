@@ -9,7 +9,8 @@ Kita bisa menggunakan flag `-cp` untuk memberi tahu java, di mana classpath dari
 
 ```bash
 javac -cp . Main.java entity/User.java entity/monster/Monster.java
-java -cp . Main```
+java -cp . Main
+```
 
 ## Cara Mengorganisasikan Proyek Java Dengan Namespace
 
