@@ -2,15 +2,98 @@
 
 ## Cara Mengorganisasikan Proyek Java Dengan Directory (a.k.a. Folder)
 
-Sebenarnya, bila sebuah file tidak memiliki deklarasi package, file tersebut dianggap hidup di default package.
-Walaupun file tersebut hidup di sebuah directory dalam directory.
+Sebenarnya, bila sebuah file tidak memiliki deklarasi "package," file tersebut dianggap hidup di "default package", tidak mempedulikan di folder mana file itu berada. 
 
-Kita bisa menggunakan flag `-cp` untuk memberi tahu java, di mana classpath dari sebuah file berada.
+Artinya, struktur directory dari sebuah proyek Java tidak akan mempengaruhi namaspace jika tidak menggunakan package.
 
-```bash
-javac -cp . Main.java entity/User.java entity/monster/Monster.java
-java -cp . Main
+Misal kita buat:
 ```
+tp4/
+    Main.java  
+    entity/
+        User.java
+        monster/
+            Monster.java
+```
+
+```java
+/* ~/tp4/Main.java */
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+        User alpha = new User();
+        alpha.greet_a_monster();
+    }
+}
+```
+
+```java
+/* ~/tp4/entity/User.java */
+
+public class User
+{
+    public void greet_a_monster()
+    {
+        System.out.println("halo bang");
+        
+        Monster jteam = new Monster();
+        jteam.say();
+    }
+}
+```
+
+```java
+/* ~/tp4/entity/monster/Monster.java */
+
+public class Monster
+{
+    public void say()
+    {
+        System.out.println("Sebenarnya saya adalah orang Jawa Timur");
+    }
+}
+```
+
+Kita bisa menggunakan flag `-cp` (cp: classpath) untuk memberi tahu lokasi file `.class` kita.
+
+Linux/Mac:
+```bash
+javac -cp ".:entity:entity/monster" Main.java
+```
+
+Windows:
+```bash
+javac -cp ".;entity;entity\monster" Main.java
+```
+
+Maka, akan menghasilkan:
+```bash
+tp4/
+    Main.class
+    Main.java
+    entity/
+        User.class
+        User.java
+        monster/
+            Monster.class
+            Monster.java
+```
+
+Dan bisa dijalankan dengan:
+
+Linux/Mac:
+```bash
+java -cp ".:entity:entity/monster" Main
+```
+
+Windows:
+```bash
+java -cp ".;entity;entity\monster" Main
+```
+
+
 
 ## Cara Mengorganisasikan Proyek Java Dengan Namespace
 
@@ -20,9 +103,20 @@ tp4/
     Main.java
     Monster.java
 ```
+(perhatikan bahwa struktur directory masih flat, tidak terdapat directory lain di dalamnya)
 
-Kita bisa mendeklarasikan bahwa sebuah file hidup di dalam sebuah package dengan `package <kategori>.<nama file>;`
-    
+Kita bisa mendeklarasikan namespace pada file `Monster.java` seperti berikut:
+```java
+package entity.monster;
+```
+
+Public class pada file tersebut akan memili "fully qualified name" berupa `entity.monster.Monster`, dan bisa kita import dengan 
+```
+import entity.monster.Monster
+```
+https://docs.oracle.com/javase/specs/jls/se11/html/jls-6.html#jls-6.7
+
+Contoh penggunaan:
 ```java
 /* ~/tp4/Monster.java */
 
@@ -36,8 +130,6 @@ public class Monster
     }
 }
 ```
-
-Lalu bisa kita import dengan `import <kategori>.<nama file>.<nama class>`
 
 ```java
 /* ~/tp4/Main.java */
@@ -54,27 +146,42 @@ public class Main
 }
 ```
 
-Lalu bisa kita compile dengan
+Lalu bisa kita compile dengan:
 ```bash
 javac -d . Monster.java Main.java
 ```
+`-d` (d: destination) di maka hasil `*.class` akan disimpan relatif di directory saat ini
 
-Maka akan menghasilkan
-```bash
-entity/monster/Monster.class
-Main.class
+Maka akan menghasilkan:
 ```
+tp4/
+    Main.class
+    Main.java
+    Monster.java
+    entity/
+        monster/
+            Monster.class
+```
+Perhatikan bahwa compiler akan secara otomatis membuat directory baru `entity/monster/` dan meletakkan `Monster.class` di sana.
 
-Semua file masih berada di dalam sebuah directory yang berstruktur flat, tetapi Java kengorganisasikannya dengan otomatis.
-
-Tidak lupa, tentunya bisa di-run dengan
+Dan dapat dijalankan hanya dengan:
 ```bash
 java Main
 ```
 
+### Mengapa tidak perlu memberi tahu classpath (-d)???
+
+- Karena secara default, classpath = .
+- dan, struktur `.class` sudah sesuai dengan deklarasi package
+
+Java pertama akan mencari class sesuai dengan fully qualified name yang diberikan, `entity.monster.Monster` akan ditemukan `entity/monster/Monster.class`.
+
+
+
+
 ## Cara Mengorganisasikan Proyek Java Dengan Package (Directory + Namaspace)
 
-Kita gabungkan kedua pendekatan sebelumnya, andaikan dengan struktur seperti berikut
+Kita gabungkan kedua pendekatan sebelumnya, andaikan dengan struktur seperti berikut:
 ```bash
 tp4/
     Main.java
@@ -83,6 +190,17 @@ tp4/
         monster/
             Monster.java
 ```
+
+---
+**Perlu diingat: layaknya nama file dan nama public class, struktur dari directory, harus sama dengan deklarasi package-nya.**
+Contoh:
+```
+entity/monster/Monster.java
+```
+```java
+package entity.monster;
+```
+---
 
 Dengan files berikut:
 ```java
@@ -99,9 +217,9 @@ public class Monster
 }
 ```
 
-**Perlu diingat: layaknya nama file dan nama public class, struktur dari directory, harus sama dengan nama package.**
-
 ```java
+/* ~/tp4/entity/User.java */
+
 package entity;
 
 import entity.monster.Monster;
@@ -119,6 +237,8 @@ public class User
 ```
 
 ```java
+/* ~/tp4/Main.java */
+
 import entity.User;
 
 public class Main
@@ -131,4 +251,33 @@ public class Main
 }
 ```
 
+Bisa langsung kita compile dengan:
+```bash
+javac -d . Main.java entity/User.java entity/monster/Monster.java
+```
 
+Maka akan menghasilkan:
+```
+tp4/
+    Main.class
+    Main.java
+    entity/
+        User.class
+        User.java
+        monster/
+            Monster.class
+            Monster.java
+```
+
+Lalu bisa dijalankan hanya dengan:
+```bash
+java Main
+```
+
+## Konvensi penaamaan
+- nama package ditulis dengan lowercase untuk menghindari konflik dengan nama kelas dan interface
+- biasanya, proyek enterprise menggunakan domain name mereka yang dibalik untuk prefiks nama package mereka. (contoh yang mungkin pernah dilihat: `com.mojang.minecraft`)
+- package yang berada di Java itu sendiri, dimulai dengan `java.` atau `javax.`
+
+https://docs.oracle.com/javase/tutorial/java/package/namingpkgs.html
+ 
