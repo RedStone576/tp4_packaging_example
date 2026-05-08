@@ -1,16 +1,19 @@
 # Pengantar Package Java
 
+> [!TIP]
+> Setiap bagian panduan di bawah berikut memiliki contoh kode yang bisa ditemukan dalam repository ini di directory yang memiliki prefiks test_ (test_directory/, test_namespace/, test_package/)
+
 # Daftar Isi
 
 1. [Cara Mengorganisasikan Proyek Java Dengan Directory (a.k.a. Folder)](#cara-mengorganisasikan-proyek-java-dengan-directory-aka-folder)
 2. [Cara Mengorganisasikan Proyek Java Dengan Namespace](#cara-mengorganisasikan-proyek-java-dengan-namespace)
-    - [Mengapa tidak perlu memberi tahu classpath (-d)???](#mengapa-tidak-perlu-memberi-tahu-classpath--d)
+    - [Mengapa tidak perlu memberi tahu classpath (-cp)???](#mengapa-tidak-perlu-memberi-tahu-classpath--cp)
 3. [Cara Mengorganisasikan Proyek Java Dengan Package (Directory + Namespace)](#cara-mengorganisasikan-proyek-java-dengan-package-directory--namaspace)
-4. [Konvensi Penamaan](#konvensi-penaamaan)
+4. [Konvensi Penamaan](#konvensi-penamaan)
 
 ## Cara Mengorganisasikan Proyek Java Dengan Directory (a.k.a. Folder)
 
-Sebenarnya, bila sebuah file tidak memiliki deklarasi "package," file tersebut dianggap hidup di "default package", tidak mempedulikan di folder mana file itu berada. 
+Sebenarnya, bila sebuah file tidak memiliki deklarasi "package," file tersebut dianggap hidup di "default package," tidak mempedulikan di folder mana file itu berada. 
 
 Artinya, struktur directory dari sebuah proyek Java tidak akan mempengaruhi namaspace jika tidak menggunakan package.
 
@@ -118,7 +121,7 @@ Kita bisa mendeklarasikan namespace pada file `Monster.java` seperti berikut:
 package entity.monster;
 ```
 
-Public class pada file tersebut akan memili "fully qualified name" berupa `entity.monster.Monster`, dan bisa kita import dengan:
+Public class pada file tersebut akan memiliki "fully qualified name" berupa `entity.monster.Monster`, dan bisa kita import dengan:
 ```
 import entity.monster.Monster
 ```
@@ -177,7 +180,7 @@ Dan dapat dijalankan hanya dengan:
 java Main
 ```
 
-### Mengapa tidak perlu memberi tahu classpath (-d)???
+### Mengapa tidak perlu memberi tahu classpath (-cp)???
 
 - Karena secara default, classpath = .
 - dan, struktur `.class` sudah sesuai dengan deklarasi package
@@ -283,7 +286,7 @@ Lalu bisa dijalankan hanya dengan:
 java Main
 ```
 
-## Konvensi penaamaan
+## Konvensi penamaan
 - nama package ditulis dengan lowercase untuk menghindari konflik dengan nama kelas dan interface
 - biasanya, proyek enterprise menggunakan domain name mereka yang dibalik untuk prefiks nama package mereka. (contoh yang mungkin pernah dilihat: `com.mojang.minecraft`)
 - package yang berada di Java itu sendiri, dimulai dengan `java.` atau `javax.`
